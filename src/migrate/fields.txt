@@ -1,0 +1,13 @@
+Total não homologado                                                0.0
+Name: 396, dtype: object
+Campus                                                                 CMPRV
+Periodo letivo                                                        2018/1
+Professor                        Frederico Antonio Loureiro Soares (1807622)
+Situação                                                          Homologado
+Total                                                                 253.52
+Aula                                                                    65.0
+Ensino                                                                  1.25
+Capacitação                                                              0.0
+Pesquisa                                                              117.25
+Extensão                                                                 0.0
+Administração e Representação                                          70.02
