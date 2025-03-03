@@ -11,3 +11,13 @@ Capacitação                                                              0.0
 Pesquisa                                                              117.25
 Extensão                                                                 0.0
 Administração e Representação                                          70.02
+
+
+Situação:
+
+{
+    'Homologado': 'Homologado', 
+    'Não Entregue': 'Não Entregue', 
+    'Não Homologado': 'Não Homologado', 
+    'Encaminhado': 'Encaminhado'
+}
