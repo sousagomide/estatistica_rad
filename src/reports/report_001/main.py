@@ -17,7 +17,7 @@ for row in rows:
         data['situacao'].append(row[1])
 df = pd.DataFrame(data)
 df = df.iloc[::-1].reset_index(drop=True)
-print(df)
+# print(df)
 
 sns.set_theme(style="whitegrid")
 g = sns.catplot(
