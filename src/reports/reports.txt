@@ -3,3 +3,4 @@ A seguir os relatórios criados para fins estatísticos:
 report_001:
 
     Relatório usado para visualizar a situação de todos os RADs ao longo dos períodos.
+
