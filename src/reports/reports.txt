@@ -4,3 +4,27 @@ report_001:
 
     Relatório usado para visualizar a situação de todos os RADs ao longo dos períodos.
 
+report_002: 
+
+    Relatório usado para listar o menor, maior, média das pontuações homologadas por período.
+
+report_003:
+
+    Relatório que gera um arquivo excel contento:
+
+    1. Medidas de Tendência Central
+        - Média
+        - Mediana
+        - Moda
+    2. Medidas de Dispersão
+        - Desvio Padrão
+        - Variância
+        - Amplitude
+        - Intervalo Interquartílico (IQR)
+    3. Medidas de Posição
+        - Quartis
+            - Q1 (1º quartil)
+            - Q2 (2º quartil ou Mediana)
+            - Q3 (3º quartil)
+        - Percentis
+        - Z-Score (Escore Z)
