@@ -29,4 +29,8 @@ report_003:
 
 report_004:
 
-    Frequência de RADs homologados de acordo com os Quartis (Q1, Q2, Q3, Q4)
+    Frequência de RADs homologados de acordo com os Intervalos
+        ]0-100]
+        ]100-150]
+        ]150-200]
+        Maior que 200
