@@ -25,6 +25,7 @@ for p in periodo:
     Q3 = np.percentile(dados, 75)  # 3º quartil (75%)
     estatistica_periodo.append(round(float(Q1),2))
     estatistica_periodo.append(round(float(np.median(dados)),2))
+    estatistica_periodo.append(round(float(Q3),2))
     print(estatistica_periodo)
 cursor.close()
 connection.close()
