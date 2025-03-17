@@ -28,3 +28,5 @@ report_003:
             - Q3 (3º quartil)
 
 report_004:
+
+    Frequência de RADs homologados de acordo com os Quartis (Q1, Q2, Q3, Q4)
