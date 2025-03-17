@@ -13,18 +13,18 @@ report_003:
     Relatório que gera um arquivo excel contento:
 
     1. Medidas de Tendência Central
-        - Média
-        - Mediana
-        - Moda
+        OK - Média
+        OK - Mediana
+        OK - Moda
     2. Medidas de Dispersão
-        - Desvio Padrão
-        - Variância
-        - Amplitude
-        - Intervalo Interquartílico (IQR)
+        OK - Desvio Padrão
+        OK - Variância
+        OK - Amplitude
+        OK - Intervalo Interquartílico (IQR)
     3. Medidas de Posição
-        - Quartis
+        OK - Quartis
             - Q1 (1º quartil)
             - Q2 (2º quartil ou Mediana)
             - Q3 (3º quartil)
-        - Percentis
-        - Z-Score (Escore Z)
+
+report_004:
