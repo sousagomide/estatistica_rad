@@ -1,0 +1,8 @@
+A seguir os modelos de dados a serem exportados:
+
+export_001:
+
+    Gera duas planilhas por intervalo de período:
+        - RADs que possuem a pontuação total menores do que zero ou negativas;
+        - RADs que possuem a pontuação total maiores do que zero;
+
