@@ -5,13 +5,14 @@ import sqlite3
 
 connection = sqlite3.connect('rad_statistic.db')
 contents = os.listdir('download')
-# contents = ['rad_2018_1.xlsx']
+# contents = ['rad_2014_2.xlsx']
 cursor = connection.cursor()
 pattern = r'^(.*?)\s\((\d+)\)$'
 for item in contents:
     path = f'download/{item}'
     print(path)
     df = pd.read_excel(path, engine='openpyxl')
+    # print(df.head())
     for index, row in df.iterrows():
         result = re.match(pattern, df.loc[index, 'Professor'])
         data = {
@@ -21,13 +22,13 @@ for item in contents:
             'siape': result.group(2),
             'situacao': df.loc[index, 'Situação'],
             'total': df.loc[index, 'Total'],
-            'aula': df.loc[index, 'Aula'],
-            'ensino': df.loc[index, 'Ensino'],
-            'capacitacao': df.loc[index, 'Capacitação'],
-            'pesquisa': df.loc[index, 'Pesquisa'],
-            'extensao': df.loc[index, 'Extensão'],
-            'administracao': df.loc[index, 'Administração e Representação'],
-            'total_nao_homologado': df.loc[index, 'Total não homologado']
+            'aula': int(df.loc[index, 'Aula']),
+            'ensino': int(df.loc[index, 'Ensino']),
+            'capacitacao': int(df.loc[index, 'Capacitação']),
+            'pesquisa': int(df.loc[index, 'Pesquisa']),
+            'extensao': int(df.loc[index, 'Extensão']),
+            'administracao': int(df.loc[index, 'Administração e Representação']),
+            'total_nao_homologado': int(df.loc[index, 'Total não homologado'])
         }
         cursor.execute(f'SELECT * FROM servidores WHERE siape = "{data['siape']}"')
         rows = cursor.fetchall()

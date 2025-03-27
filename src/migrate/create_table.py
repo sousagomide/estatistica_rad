@@ -1,6 +1,6 @@
 import sqlite3
 
-connection = sqlite3.connect('rad_statistic.db')
+connection = sqlite3.connect('auxiliar_database.db')
 
 cursor = connection.cursor()
 cursor.execute('''
