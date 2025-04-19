@@ -24,10 +24,10 @@ for i in interval:
     i_label = ", ".join(f"'{item}'" for item in i)
     for j in category:
         filename = f"rads_{i[0].split('/')[0]}_{i[-1].split('/')[0]}_total_{'menor' if j == 'total <= 0' else 'maior'}_0"
-        query = f"SELECT * FROM rads WHERE {j} AND situacao = 'Homologado' AND periodo IN ({i_label}) ORDER BY periodo"
+        query = f"SELECT id, campus, periodo, situacao, total, aula, ensino, capacitacao, pesquisa, extensao, administracao, total_nao_homologado, rads.siape FROM rads, servidores WHERE {j} AND situacao = 'Homologado' AND periodo IN ({i_label}) AND rads.siape = servidores.siape ORDER BY periodo"
         cursor.execute(query)
         rows = cursor.fetchall()
-        data = {'id': [], 'periodo': [], 'situacao': [], 'total': [], 'aula': [], 'ensino': [], 'capacitacao': [], 'pesquisa': [], 'extensao': [], 'administracao': [], 'total_nao_homologado': [], 'siape': []}
+        data = {'id': [], 'campus': [], 'periodo': [], 'situacao': [], 'total': [], 'aula': [], 'ensino': [], 'capacitacao': [], 'pesquisa': [], 'extensao': [], 'administracao': [], 'total_nao_homologado': [], 'siape': []}
         [data[column].append(line) for row in rows for line, column in zip(row, data.keys())]
         df = pd.DataFrame(data)
         df.to_excel(f'output/{filename}.xlsx', index=False)
