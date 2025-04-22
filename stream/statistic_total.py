@@ -79,7 +79,7 @@ class StatisticTotal:
         curve = alt.Chart(df_curve).mark_line(color='red', strokeWidth=2).encode(
             x='x:Q',
             y='y:Q'
-        ).interactive()
+        )
         chart = (hist + curve).properties(width=600, height=400)
         st.altair_chart(chart, use_container_width=True)
 
