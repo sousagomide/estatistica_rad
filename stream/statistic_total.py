@@ -75,11 +75,11 @@ class StatisticTotal:
         hist = alt.Chart(df).mark_bar(opacity=0.7, color='lightblue').encode(
             alt.X('total:Q', bin=alt.Bin(step=bin_step), title='Valor'),
             alt.Y('count():Q', title='Frequência')
-        )
+        ).interactive()
         curve = alt.Chart(df_curve).mark_line(color='red', strokeWidth=2).encode(
             x='x:Q',
             y='y:Q'
-        ).interactive()
+        )
         chart = (hist + curve).properties(width=600, height=400)
         st.altair_chart(chart, use_container_width=True)
 

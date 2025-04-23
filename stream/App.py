@@ -9,6 +9,7 @@ from dataset import Dataset
 from suporte import Suporte
 from limpeza import Cleaning
 from statistic_total import StatisticTotal
+from statistic_category import StatisticCategory
 
 st.set_page_config(
     page_title='Estatística RAD',
@@ -64,4 +65,4 @@ elif selected == 'Análise Estatística':
     if submenu == 'Total':
         StatisticTotal(df_clear).load()        
     elif submenu == 'Categoria':
-        st.write('Categoria')
+        StatisticCategory(df_clear).load()
