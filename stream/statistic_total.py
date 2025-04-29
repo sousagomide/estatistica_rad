@@ -25,7 +25,7 @@ class StatisticTotal:
         )
         limit = self.definirIQR(opcoes)
         df = self.buscarRegulamento(opcoes)
-        self.printLimit(limit)
+        # self.printLimit(limit)
         df_limit = self.filterLimit(limit, df)
         st.subheader('Boxplot')
         self.bloxplot(df_limit, opcoes)
@@ -179,7 +179,8 @@ class StatisticTotal:
     
     def filterLimit(self, limit, df):
         df_filter = df.copy()
-        return df_filter[(df_filter['total'] >= limit.loc['total', 'limitinf']) & (df_filter['total'] <= limit.loc['total', 'limitsup'])]
+        # return df_filter[(df_filter['total'] >= limit.loc['total', 'limitinf']) & (df_filter['total'] <= limit.loc['total', 'limitsup'])]
+        return df_filter[(df_filter['total'] >= limit.loc['total', 'limitinf'])]
 
     def calcularMedianaPorPeriodo(self, df):
         df_mediana = df.copy()
