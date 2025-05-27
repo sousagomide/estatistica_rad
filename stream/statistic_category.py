@@ -185,7 +185,8 @@ class StatisticCategory:
     
     def filterLimit(self, limit, df):
         df_filter = df.copy()
-        return df_filter[(df_filter['total'] >= limit.loc['total', 'limitinf']) & (df_filter['total'] <= limit.loc['total', 'limitsup'])]
+        # return df_filter[(df_filter['total'] >= limit.loc['total', 'limitinf']) & (df_filter['total'] <= limit.loc['total', 'limitsup'])]
+        return df_filter[(df_filter['total'] >= limit.loc['total', 'limitinf'])]
     
     def listarCampus(self, df):
         valores_ordenados = sorted(df['campus'].dropna().unique().tolist())
