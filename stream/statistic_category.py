@@ -9,6 +9,8 @@ from scipy import stats
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import statsmodels.api as sm
 import scikit_posthocs as sp
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 class StatisticCategory:
 
@@ -31,7 +33,8 @@ class StatisticCategory:
         self.barras_agrupadas(df_limit, opcoesCampus)
         self.quadroDocente()
         self.barras_agrupadas_individuos(df_limit, opcoesCampus)
-        self.relacao_carga_horaria(df_limit, opcoesCampus)
+        self.relacao_carga_horaria(df_limit, opcoesCampus, opcoes)
+        self.diferentes_eixos(df_limit, opcoesCampus)
 
 
     def pizza(self, df, opcoesCampus):
@@ -154,11 +157,12 @@ class StatisticCategory:
         st.subheader("Resumo de docentes por atividade e período")
         st.dataframe(df_pivotado)
 
-    def relacao_carga_horaria(self, df, opcoesCampus):
+    def relacao_carga_horaria(self, df, opcoesCampus, opcoes):
         if opcoesCampus != 'TODOS':
             df = df[df['campus'] == opcoesCampus]
 
-        df['carga_semanal'] = df['aula'] / (0.4 * 20)
+        valor_aula = 0.25 if opcoes == '2018/1 a 2018/2' else 0.35 if opcoes == '2019/1 a 2022/2' else 0.40
+        df['carga_semanal'] = df['aula'] / (valor_aula * 20)
 
         bins = [0, 12, 18, float('inf')]
         labels = ['0 a 12h', '12 a 18h', 'Acima de 18h']
@@ -183,6 +187,34 @@ class StatisticCategory:
         st.subheader("Resumo do Número de Docentes por Período e Faixa de Carga Horária")
         df_pivot = df_faixas.pivot(index='periodo', columns='faixa_carga', values='quantidade').fillna(0).astype(int)
         st.dataframe(df_pivot)
+
+    def diferentes_eixos(self, df, opcoesCampus):
+        if opcoesCampus != 'TODOS':
+            df = df[df['campus'] == opcoesCampus]
+        st.subheader("Porcentagem de Docentes que atuam em diferentes eixos")
+        opcoes = ['administracao', 'aula', 'capacitacao', 'ensino', 'extensao', 'pesquisa']
+        selecionados = st.multiselect('Selecione os eixos:', options = opcoes, default = ['aula'])
+        if not selecionados:
+            st.warning("Por favor, selecione pelo menos um eixo para exibir o gráfico.")
+            return
+        df_filtrado = df[(df[selecionados] > 0).all(axis=1)]
+        df_agrupado = df_filtrado.groupby('periodo').size().reset_index(name='count')
+        area_chart = alt.Chart(df_agrupado).mark_area(opacity=0.3).encode(
+            x='periodo:N',
+            y='count:Q',
+            tooltip=['periodo', 'count']
+        ).properties(
+            title='Contagem por Período (Área)',
+            width=400,
+            height=300
+        )
+
+        st.altair_chart(area_chart)
+        st.dataframe(df_agrupado)
+        
+        
+
+
 
     def colorir_valor(self, val):
         if val > 0:
