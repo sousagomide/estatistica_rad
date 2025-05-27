@@ -184,13 +184,6 @@ class StatisticCategory:
         df_pivot = df_faixas.pivot(index='periodo', columns='faixa_carga', values='quantidade').fillna(0).astype(int)
         st.dataframe(df_pivot)
 
-
-
-
-
-
-
-
     def colorir_valor(self, val):
         if val > 0:
             return 'background-color: #d4edda'  # verde claro
