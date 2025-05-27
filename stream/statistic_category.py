@@ -30,6 +30,8 @@ class StatisticCategory:
         self.pizza(df_limit, opcoesCampus)
         self.barras_agrupadas(df_limit, opcoesCampus)
         self.quadroDocente()
+        self.barras_agrupadas_individuos(df_limit, opcoesCampus)
+        self.relacao_carga_horaria(df_limit, opcoesCampus)
 
 
     def pizza(self, df, opcoesCampus):
@@ -90,11 +92,11 @@ class StatisticCategory:
             y=alt.Y('Total:Q', title='Total de Atividades'),
             color=alt.Color('Atividade:N', scale=color_scale, legend=alt.Legend(title='Atividade')),
             tooltip=['periodo', 'Atividade', 'Total'],
-            xOffset='Atividade:N'  # <- isso agrupa as barras lado a lado por atividade
+            xOffset='Atividade:N'
         ).properties(
             width=600,
             height=400,
-            title='Atividades por Período (barras agrupadas)'
+            title='Atividades por Período'
         )
         st.altair_chart(chart, use_container_width=True)
         df_pivotado = df_melted.pivot(
@@ -104,9 +106,7 @@ class StatisticCategory:
         ).fillna(0).astype(int)
         st.subheader("Resumo de atividades por período")
         st.dataframe(df_pivotado)
-        # Calcula a variação percentual da última coluna em relação à primeira
         variacao_percentual = ((df_pivotado.iloc[:, -1] - df_pivotado.iloc[:, 0]) / df_pivotado.iloc[:, 0]) * 100
-        # Cria novo DataFrame com os resultados
         df_variacao = pd.DataFrame({
             'Atividade': df_pivotado.index,
             'Variação Percentual (%)': variacao_percentual.round(2)
@@ -116,6 +116,80 @@ class StatisticCategory:
         .format("{:.2f}")
         st.subheader("Variação Percentual da Primeira para a Última Coluna")
         st.dataframe(styled_df)
+
+    def barras_agrupadas_individuos(self, df, opcoesCampus):
+        atividades = ["aula", "ensino", "capacitacao", "pesquisa", "extensao", "administracao"]
+        color_scale = alt.Scale(scheme='tableau10')
+        if opcoesCampus != 'TODOS':
+            df = df[df['campus'] == opcoesCampus]
+        df[atividades] = df[atividades].apply(pd.to_numeric, errors='coerce')
+        df_individuos = df.copy()
+        for atividade in atividades:
+            df_individuos[atividade] = df_individuos[atividade].apply(lambda x: 1 if x != 0 else 0)
+        df_contagem = df_individuos.groupby('periodo')[atividades].sum().reset_index()
+        df_melted = df_contagem.melt(
+            id_vars='periodo',
+            value_vars=atividades,
+            var_name='Atividade',
+            value_name='Quantidade de Docentes'
+        )
+        df_melted = df_melted[df_melted['Quantidade de Docentes'].notnull()]
+        chart = alt.Chart(df_melted).mark_bar().encode(
+            x=alt.X('periodo:N', title='Período', axis=alt.Axis(labelAngle=-45)),
+            y=alt.Y('Quantidade de Docentes:Q', title='Docentes Participantes'),
+            color=alt.Color('Atividade:N', scale=color_scale, legend=alt.Legend(title='Atividade')),
+            tooltip=['periodo', 'Atividade', 'Quantidade de Docentes'],
+            xOffset='Atividade:N'
+        ).properties(
+            width=600,
+            height=400,
+            title='Quantidade de Docentes por Atividade'
+        )
+        st.altair_chart(chart, use_container_width=True)
+        df_pivotado = df_melted.pivot(
+            index='Atividade',
+            columns='periodo',
+            values='Quantidade de Docentes'
+        ).fillna(0).astype(int)
+        st.subheader("Resumo de docentes por atividade e período")
+        st.dataframe(df_pivotado)
+
+    def relacao_carga_horaria(self, df, opcoesCampus):
+        if opcoesCampus != 'TODOS':
+            df = df[df['campus'] == opcoesCampus]
+
+        df['carga_semanal'] = df['aula'] / (0.4 * 20)
+
+        bins = [0, 12, 18, float('inf')]
+        labels = ['0 a 12h', '12 a 18h', 'Acima de 18h']
+        df['faixa_carga'] = pd.cut(df['carga_semanal'], bins=bins, labels=labels, right=False)
+
+        df_faixas = df.groupby(['periodo', 'faixa_carga']).size().reset_index(name='quantidade')
+        df_faixas['faixa_carga'] = pd.Categorical(df_faixas['faixa_carga'], categories=labels, ordered=True)
+        df_faixas = df_faixas.sort_values(['periodo', 'faixa_carga'])
+
+        chart = alt.Chart(df_faixas).mark_bar().encode(
+            x=alt.X('periodo:N', title='Período'),
+            xOffset='faixa_carga:N',  # distribui as barras dentro de cada grupo período
+            y=alt.Y('quantidade:Q', title='Número de Docentes'),
+            color=alt.Color('faixa_carga:N', legend=alt.Legend(title='Faixa de Carga')),
+            tooltip=['periodo', 'faixa_carga', 'quantidade']
+        ).properties(
+            width=700,
+            height=400
+        )
+        st.subheader("Número de Docentes por Período e Faixa de Carga Horária")
+        st.altair_chart(chart, use_container_width=True)
+        st.subheader("Resumo do Número de Docentes por Período e Faixa de Carga Horária")
+        df_pivot = df_faixas.pivot(index='periodo', columns='faixa_carga', values='quantidade').fillna(0).astype(int)
+        st.dataframe(df_pivot)
+
+
+
+
+
+
+
 
     def colorir_valor(self, val):
         if val > 0:
