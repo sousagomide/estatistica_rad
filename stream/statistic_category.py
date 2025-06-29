@@ -53,8 +53,7 @@ class StatisticCategory:
             ]
         ).properties(
             width=300,
-            height=300,
-            title=f'Total de atividades por tipo - Campus: {opcoesCampus}'
+            height=300
         )
         barras = alt.Chart(totais).mark_bar().encode(
             y=alt.Y('Atividade', sort='-x', title=''),
@@ -75,6 +74,7 @@ class StatisticCategory:
             text=alt.Text('Total')
         )
         grafico_combinado = alt.hconcat(chart, barras+text)
+        st.subheader(f'Total de atividades realizadas - Campus: {opcoesCampus}')
         st.altair_chart(grafico_combinado, use_container_width=True)
         st.dataframe(totais)
 
@@ -98,16 +98,15 @@ class StatisticCategory:
             xOffset='Atividade:N'
         ).properties(
             width=600,
-            height=400,
-            title='Atividades por Período'
+            height=400
         )
+        st.subheader('Atividades por Período')
         st.altair_chart(chart, use_container_width=True)
         df_pivotado = df_melted.pivot(
             index='Atividade',
             columns='periodo',
             values='Total'
         ).fillna(0).astype(int)
-        st.subheader("Resumo de atividades por período")
         st.dataframe(df_pivotado)
         variacao_percentual = ((df_pivotado.iloc[:, -1] - df_pivotado.iloc[:, 0]) / df_pivotado.iloc[:, 0]) * 100
         df_variacao = pd.DataFrame({
@@ -117,7 +116,7 @@ class StatisticCategory:
         styled_df = df_variacao.style \
         .applymap(self.colorir_valor) \
         .format("{:.2f}")
-        st.subheader("Variação Percentual da Primeira para a Última Coluna")
+        st.write("**Variação Percentual do primero período em relação ao último período**")
         st.dataframe(styled_df)
 
     def barras_agrupadas_individuos(self, df, opcoesCampus):
@@ -145,16 +144,15 @@ class StatisticCategory:
             xOffset='Atividade:N'
         ).properties(
             width=600,
-            height=400,
-            title='Quantidade de Docentes por Atividade'
+            height=400
         )
+        st.subheader('Quantidade de docentes que prestam serviço nos eixos (aula, ensino, extensão, pesquisa, capacitação e administração e representação)')
         st.altair_chart(chart, use_container_width=True)
         df_pivotado = df_melted.pivot(
             index='Atividade',
             columns='periodo',
             values='Quantidade de Docentes'
         ).fillna(0).astype(int)
-        st.subheader("Resumo de docentes por atividade e período")
         st.dataframe(df_pivotado)
 
     def relacao_carga_horaria(self, df, opcoesCampus, opcoes):
@@ -184,7 +182,6 @@ class StatisticCategory:
         )
         st.subheader("Número de Docentes por Período e Faixa de Carga Horária")
         st.altair_chart(chart, use_container_width=True)
-        st.subheader("Resumo do Número de Docentes por Período e Faixa de Carga Horária")
         df_pivot = df_faixas.pivot(index='periodo', columns='faixa_carga', values='quantidade').fillna(0).astype(int)
         st.dataframe(df_pivot)
 
@@ -230,8 +227,7 @@ class StatisticCategory:
             'docente efetivo': [674, 721, 722, 729, 726, 713]
         }
         df_docentes = pd.DataFrame(dados)
-        st.subheader("Tabela de Docentes por Ano (Plataforma Nilo Peçanha)")
-        st.dataframe(df_docentes)
+        
         # Transformando os dados para o formato adequado para o gráfico
         df_melted = df_docentes.melt(id_vars=['ano'], var_name='Tipo de Docente', value_name='Quantidade')
 
@@ -245,15 +241,15 @@ class StatisticCategory:
             color='Tipo de Docente:N',  # Cor por tipo de docente (número de docentes ou efetivos)
             tooltip=['ano', 'Tipo de Docente', 'Quantidade']  # Tooltip para mostrar valores
         ).properties(
-            title='Número de Docentes e Docentes Efetivos por Ano',
             width=600,
             height=400
         )
 
         # Exibindo o gráfico no Streamlit
-        st.subheader("Gráfico de Linha - Número de Docentes e Docente Efetivo")
+        st.subheader("Número de Docentes e Docente Efetivo (Plataforma Nilo Peçanha)")
         st.altair_chart(chart, use_container_width=True)
-    
+        # st.subheader("Tabela de Docentes por Ano (Plataforma Nilo Peçanha)")
+        st.dataframe(df_docentes)
         
 
 
