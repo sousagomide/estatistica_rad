@@ -35,6 +35,8 @@ class StatisticTotal:
         self.densityPlot(df_limit)
         st.subheader('Mediana dos totais por período')
         self.barrasMediana(self.calcularMedianaPorPeriodo(df_limit))
+        st.subheader('Estatística Descritiva')
+        st.dataframe(df_limit.describe())
         st.subheader('Comparação entre os regulamentos')
         self.anova()
 
