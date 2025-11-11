@@ -1,0 +1,15 @@
+name: Keep Streamlit App Awake (Business Hours)
+
+on:
+  schedule:
+    # A cada 10 minutos de segunda a sexta
+    - cron: "*/10 10-20 * * 1-5"  # Horário em UTC (ajuste abaixo se precisar)
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Streamlit app
+        run: |
+          curl -s https://estatisticarad.streamlit.app/ > /dev/null
